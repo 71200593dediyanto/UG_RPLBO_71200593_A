@@ -16,7 +16,7 @@ public class SmartCard {
         this.saldo = saldo;
     }
 
-    public Long getSaldo() {
+    public long getSaldo() {
         return saldo;
     }
 
@@ -24,7 +24,7 @@ public class SmartCard {
         if (vch.getKode().equals("VC")){
             System.out.println("Kode Voucher: "+vch.getKode()+" || Top up gagal! Kode voucher tidak valid.");
         }else{
-            Long tempSaldo = Long.parseLong(vch.getKode().substring(2));
+            long tempSaldo = Long.parseLong(vch.getKode().substring(2));
             this.saldo += tempSaldo;
             System.out.println("Kode Voucher: "+ vch.getKode() + " || Top up sukses!");
         }
