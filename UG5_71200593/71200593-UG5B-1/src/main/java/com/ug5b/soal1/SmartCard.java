@@ -26,7 +26,6 @@ public class SmartCard {
         }else{
             Long tempSaldo = Long.parseLong(vch.getKode().substring(2));
             this.saldo += tempSaldo;
-            vch.setNominal(tempSaldo);
             System.out.println("Kode Voucher: "+ vch.getKode() + " || Top up sukses!");
         }
     }
