@@ -16,6 +16,8 @@ public class Ranged extends Hero implements Skill{
     public void attack(Character enemy){
         if(enemy instanceof Minion){
             this.setHealthBonus(150);
+        }else {
+            this.setHealthBonus(0);
         }
         super.attack(enemy);
     }
