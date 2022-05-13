@@ -1,180 +1,164 @@
-package com.org.ug11;
-
+package BEBAS;
+import java.sql.SQLOutput;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-/**
- * Hello world!
- *
- */
-public class App 
+public class App
 {
-    public static String validUsername;
-    public static String validEmail;
-    public static String validPassword;
+    public static void main( String[] args ) throws UsernameException, LoginException, TweetException, BioException
+    {
+        User user = new User("u71200593","p71200593");
+        checkLogin(user.getUsername(),user.getPassword());
+        String newUsername = CheckUser();
+        user.setUsername(newUsername);
+        System.out.println("Username kamu berhasil diperbaharui, "+newUsername);
+        System.out.println("Maaf, "+newUsername+" kamu juga diminta untuk mengisi bio, silahkan masukkan bio kamu");
+        String bio = CheckBio();
+        System.out.println("Bio kamu berhasil diperbaharui, "+bio);
+        System.out.println("Selamat, "+newUsername +" kamu sudah dapat memposting tweet pertama kamu");
+        String tweet = CheckTweet();
+        System.out.println("@"+newUsername+": "+tweet);
+        System.out.println();
+        System.out.println("Username: "+user.getUsername());
+        System.out.println("Password: "+ user.getPassword());
+        System.out.println("Bio: "+bio);
+        System.out.println();
 
-    public static void main( String[] args ) throws UsernameException, EmailException, PasswordException, LoginException {
-        validUsername = username();
-        validEmail = email();
-        validPassword = password();
-        User user = new User(validUsername,validEmail,validPassword);
-        System.out.println("Akun kamu berhasil didaftarkan!");
-        System.out.println("Silahkan login untuk melanjutkan\n");
-        login(user);
+
+
+
+
     }
 
-    public static void login(User user) throws LoginException {
-        boolean isValid = false;
+    public static void checkLogin(String Username, String Password) throws LoginException{
 
-        while (!isValid){
+        while (true){
             Scanner inp = new Scanner(System.in);
             System.out.print("Username : ");
-            String usernameLogin = inp.nextLine();
+            String uLogin = inp.nextLine();
             System.out.print("Password : ");
-            String pwLogin = inp.nextLine();
-            try{
-                if(usernameLogin.isEmpty()){
+            String pLogin = inp.nextLine();
+
+            try {
+                if(uLogin.isEmpty() || pLogin.isEmpty()){
                     throw new LoginException(1);
-                }
-                else if(pwLogin.isEmpty()){
+                }else if ( !uLogin.equals(Username) || !pLogin.equals(Password)){
                     throw new LoginException(2);
-                }
-                else if(!usernameLogin.equals(user.getUsername()) && !pwLogin.equals(user.getPassword())){
-                    throw new LoginException(3);
                 }else {
-                    isValid = true;
+                    System.out.println("Selamat datang di Twitter, " + uLogin);
+                    System.out.println("Kamu diminta untuk mengganti username, silahkan masukkan username kamu");
+                    break;
                 }
-            }
-            catch (LoginException e){
-                System.out.println("Error : " + e.getErrorMessage());
+
+            } catch (LoginException e){
+                System.out.println(e.getErrMssg());
             }
         }
     }
 
-    public static String username() throws UsernameException{
-        boolean isValid = false;
+    public static String CheckUser() throws UsernameException{
         String username = "";
-
-        while (!isValid) {
+        boolean isValid = false;
+        while (!isValid){
             Scanner inp = new Scanner(System.in);
-            System.out.print("Username\t:");
+            System.out.print("Username : ");
             username = inp.nextLine();
+
             try {
-                if (username.isEmpty()) {
+                if (username.isEmpty()){
                     throw new UsernameException(1);
-                } else if (username.length() < 6) {
+                }else if(username.length() < 6){
                     throw new UsernameException(2);
                 }else {
-                    isValid = true;
+                    boolean huruf = true;
+                    boolean angka = true;
+                    boolean underscore = true;
+
+                    for (int i = 0; i < username.length(); i++){
+                        char c = username.charAt(i);
+
+                        if (!Character.isLetterOrDigit(c)){
+                            if(c != '_'){
+                                huruf = false;
+                                angka = false;
+                                underscore = false;
+                            }else {
+                                underscore = false;
+                            }
+                        }
+                    }
+                    try {
+                        if (huruf || angka || underscore){
+                            isValid = true;
+                            return username;
+                        }else {
+                            throw new UsernameException(3);
+                        }
+
+                    }catch (UsernameException e){
+                        System.out.println(e.getErrMssg());
+                    }
                 }
-            } catch (UsernameException e) {
-                System.out.println("Error : " + e.getErrorMessage());
+            }catch (UsernameException e){
+                System.out.println(e.getErrMssg());
             }
         }
         return username;
     }
 
-    public static String email() throws EmailException{
+    public static String CheckBio() throws BioException{
+        String bio = "";
         boolean isValid = false;
-        String email = "";
-
-        while(!isValid) {
+        while (!isValid){
             Scanner inp = new Scanner(System.in);
-            System.out.print("Email\t: ");
-            email = inp.nextLine();
-
-            String regex = "^(.+)@(.+)$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(email);
-            boolean isValidPattern = matcher.matches();
+            System.out.print("Bio : ");
+            bio = inp.nextLine();
 
             try {
-                if (email.isEmpty()) {
-                    throw new EmailException(1);
-                } else if (!isValidPattern) {
-                    throw new EmailException(2);
+                if (bio.isEmpty()){
+                    throw new BioException(1);
+                }else if (bio.length()<5 && bio.length()>30){
+                    throw new BioException(3);
                 }else {
-                    isValid = true;
-                }
+                    boolean validSymbol = true;
 
-            } catch (EmailException e) {
-                System.out.println("Error : " + e.getErrorMessage());
+                    for(int i = 0; i < bio.length(); i++){
+                        char c = bio.charAt(i);
+
+                        if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && (c != '.' && c != '@')){
+                            throw new BioException(2);
+                        }else {
+                            isValid = true;
+                        }
+                    }
+                }
+            }catch (BioException e){
+                System.out.println(e.getErrMssg());
             }
         }
-        return email;
+        return bio;
     }
 
-    public static String password() throws PasswordException{
+    public static String CheckTweet() throws TweetException{
+        String tweet = "";
         boolean isValid = false;
-        String password = "";
 
-        while(!isValid) {
+        while (!isValid){
             Scanner inp = new Scanner(System.in);
-            System.out.print("Password\t: ");
-            password = inp.nextLine();
+            System.out.println("Tweet : ");
+            tweet = inp.nextLine();
 
             try {
-                if (password.isEmpty()) {
-                    throw new PasswordException(1);
-                } else if (password.length() < 7) {
-                    throw new PasswordException(2);
-                } else if (password.equals(validUsername)) {
-                    throw new PasswordException(4);
-                } else {
-                    boolean flagKecil = false;
-                    boolean flagBesar = false;
-                    boolean flagAngka = false;
-                    boolean flagSymbol = false;
-                    for (int i = 0; i < password.length(); i++) {
-                        char c = password.charAt(i);
-                        int asciiVal = (int) c;
-                        if (Character.isLetter(c) && Character.isLowerCase(c)) {
-                            flagKecil = true;
-                        }
-                        if (Character.isLetter(c) && Character.isUpperCase(c)) {
-                            flagBesar = true;
-                        }
-                        if (Character.isDigit(c)) {
-                            flagAngka = true;
-                        }
-                        if ((asciiVal >= 32 && asciiVal <= 47) || (asciiVal >= 58 && asciiVal <= 64)
-                                || (asciiVal >= 91 && asciiVal <= 96) || (asciiVal >= 123 && asciiVal <= 126)) {
-                            flagSymbol = true;
-                        }
-                    }
-                    if (!(flagKecil && flagAngka && flagBesar && flagSymbol)) {
-                        throw new PasswordException(3);
-                    }else {
-                        isValid = true;
-                    }
-                    }
-
-                }
-            catch (PasswordException e) {
-                System.out.println("Error : " + e.getErrorMessage());
-            }
-        }
-
-        isValid = false;
-        String confirmPassword = "";
-
-        while(!isValid) {
-            Scanner inp = new Scanner(System.in);
-            System.out.print("Konfirmasi Password\t: ");
-            confirmPassword = inp.nextLine();
-
-            try {
-                if (!confirmPassword.equals(password)) {
-                    throw new PasswordException(5);
+                if(tweet.isEmpty()){
+                    throw new TweetException(1);
+                }else if(tweet.length() < 8 && tweet.length() > 140){
+                    throw new TweetException(2);
                 }else {
                     isValid = true;
                 }
-            } catch (PasswordException e) {
-                System.out.println("Error : " + e.getErrorMessage());
+            }catch (TweetException e){
+                System.out.println(e.getErrMssg());
             }
         }
-
-        return password;
+        return tweet;
     }
 }
