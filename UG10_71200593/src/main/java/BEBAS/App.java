@@ -86,6 +86,7 @@ public class App
                     }
                     try {
                         if (huruf || angka || underscore){
+                            isValid = true;
                             return username;
                         }else {
                             throw new UsernameException(3);
