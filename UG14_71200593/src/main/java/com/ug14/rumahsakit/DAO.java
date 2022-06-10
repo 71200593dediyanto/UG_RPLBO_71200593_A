@@ -100,7 +100,7 @@ public class DAO {
 
     }
 
-    public void getPasienSembuh() throws SQLException {
+    public static void getPasienSembuh() throws SQLException {
         String url = "jdbc:mysql://localhost:3306/rumahsakit";
         Connection conn = DriverManager.getConnection(url,"root","");
         Statement statement = conn.createStatement();
@@ -115,7 +115,7 @@ public class DAO {
         }
     }
 
-    public void updateStatusPasien(Pasien pasien) throws SQLException {
+    public static void updateStatusPasien(Pasien pasien) throws SQLException {
         String url = "jdbc:mysql://localhost:3306/rumahsakit";
         Connection conn = DriverManager.getConnection(url,"root","");
         Statement statement = conn.createStatement();
