@@ -45,9 +45,10 @@ public class Dokter {
         }
     }
 
-    public void cekStatus(Pasien pasien, Jadwal jadwal){
+    public void cekStatus(Pasien pasien, Jadwal jadwal) throws SQLException {
         if (pasien.getStatus()){
             System.out.println("SELAMAT PENGUNJUNG ANDA SUDAH SEMBUH DAN SEHAT");
+            super.updateStatusPasien(pasien);
         }else {
             System.out.println("PENGUNJUNG ANDA MASIH SAKIT");
         }
