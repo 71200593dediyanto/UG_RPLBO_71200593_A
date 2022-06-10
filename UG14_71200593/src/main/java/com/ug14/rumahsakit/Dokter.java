@@ -1,7 +1,7 @@
 package com.ug14.rumahsakit;
 import java.sql.*;
 
-public class Dokter {
+public class Dokter extends DAO {
     private static int idDokter = 0;
     private String nama;
     private String spesialis;

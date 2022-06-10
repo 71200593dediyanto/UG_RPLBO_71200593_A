@@ -115,7 +115,7 @@ public class DAO {
         }
     }
 
-    public static void updateStatusPasien(Pasien pasien) throws SQLException {
+    public void updateStatusPasien(Pasien pasien) throws SQLException {
         String url = "jdbc:mysql://localhost:3306/rumahsakit";
         Connection conn = DriverManager.getConnection(url,"root","");
         Statement statement = conn.createStatement();
